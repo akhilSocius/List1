@@ -1,0 +1,94 @@
+_schema-version: "3.2"
+ID: list
+description: A Fiori application.
+version: 0.0.1
+modules:
+- name: list-destination-content
+  type: com.sap.application.content
+  requires:
+  - name: list-destination-service
+    parameters:
+      content-target: true
+  - name: list-repo-host
+    parameters:
+      service-key:
+        name: list-repo-host-key
+  - name: list-uaa
+    parameters:
+      service-key:
+        name: list-uaa-key
+  parameters:
+    content:
+      instance:
+        destinations:
+        - Name: list_html_repo_host
+          ServiceInstanceName: list-html5-srv
+          ServiceKeyName: list-repo-host-key
+          sap.cloud.service: list
+        - Authentication: OAuth2UserTokenExchange
+          Name: list_uaa
+          ServiceInstanceName: list-xsuaa-srv
+          ServiceKeyName: list-uaa-key
+          sap.cloud.service: list
+        existing_destinations_policy: ignore
+  build-parameters:
+    no-source: true
+- name: list-app-content
+  type: com.sap.application.content
+  path: .
+  requires:
+  - name: list-repo-host
+    parameters:
+      content-target: true
+  build-parameters:
+    build-result: resources
+    requires:
+    - artifacts:
+      - list.zip
+      name: list
+      target-path: resources/
+- name: list
+  type: html5
+  path: .
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+resources:
+- name: list-destination-service
+  type: org.cloudfoundry.managed-service
+  parameters:
+    config:
+      HTML5Runtime_enabled: true
+      init_data:
+        instance:
+          destinations:
+          - Authentication: NoAuthentication
+            Name: ui5
+            ProxyType: Internet
+            Type: HTTP
+            URL: https://ui5.sap.com
+          existing_destinations_policy: update
+      version: 1.0.0
+    service: destination
+    service-name: list-destination-service
+    service-plan: lite
+- name: list-uaa
+  type: org.cloudfoundry.managed-service
+  parameters:
+    path: ./xs-security.json
+    service: xsuaa
+    service-name: list-xsuaa-srv
+    service-plan: application
+- name: list-repo-host
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-name: list-html5-srv
+    service-plan: app-host
+parameters:
+  deploy_mode: html5-repo
+  enable-parallel-deployments: true

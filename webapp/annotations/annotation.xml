@@ -1,0 +1,79 @@
+<edmx:Edmx xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx" Version="4.0">
+    <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/UI.xml">
+        <edmx:Include Namespace="com.sap.vocabularies.UI.v1" Alias="UI"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/iwbep/GWSAMPLE_BASIC/$metadata">
+        <edmx:Include Namespace="GWSAMPLE_BASIC"/>
+    </edmx:Reference>
+    <edmx:DataServices>
+        <Schema xmlns="http://docs.oasis-open.org/odata/ns/edm" Namespace="local">
+            <Annotations Target="GWSAMPLE_BASIC.BusinessPartner">
+                <Annotation Term="UI.SelectionFields">
+                    <Collection>
+                        <PropertyPath>BusinessPartnerID</PropertyPath>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="UI.DataPoint" Qualifier="Partner">
+                    <Record Type="UI.DataPointType">
+                        <PropertyValue Property="Value" Path="BusinessPartnerID"/>
+                        <PropertyValue Property="Title" String="{@i18n>businessPartnerId}"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="UI.HeaderFacets">
+                    <Collection>
+                        <Record Type="UI.ReferenceFacet">  
+                            <PropertyValue Property="Target" AnnotationPath="@UI.DataPoint#Partner"/>   
+                        </Record>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="UI.Facets">
+                    <Collection>
+                        <Record Type="UI.ReferenceFacet">
+                            <PropertyValue Property="Target" AnnotationPath="@UI.FieldGroup#grp1"/>
+                            <PropertyValue Property="Label" String="{@i18n>generalInformation}"/>
+                            <PropertyValue Property="ID" String="general"/>    
+                        </Record>   
+                        <Record Type="UI.ReferenceFacet">
+                            <PropertyValue Property="Target" AnnotationPath="@UI.FieldGroup#grp2"/>
+                            <PropertyValue Property="Label" String="{@i18n>contacts}"/>
+                            <PropertyValue Property="ID" String="contact"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="UI.FieldGroup" Qualifier="grp1">
+                    <Record Type="UI.FieldGroupType">
+                        <PropertyValue Property="Data">
+                            <Collection>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="CompanyName"/>
+                                </Record>
+                                <Record Type="UI.DataField">
+                                    <PropertyValue Property="Value" Path="BusinessPartnerRole"/>
+                                </Record>
+                                
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="UI.FieldGroup" Qualifier="grp2">
+                    <Record Type="UI.FieldGroupType">
+                    <PropertyValue Property="Data">
+                        <Collection>
+                            <Record Type="UI.DataField">
+                                <PropertyValue Property="Value" Path="PhoneNumber"/>   
+                            </Record>
+                            <Record Type="UI.DataField">
+                                <PropertyValue Property="Value" Path="EmailAddress"/>
+                            </Record>
+                            <Record Type="UI.DataField">
+                                <PropertyValue Property="Value" Path="WebAddress"/>
+                            </Record>
+                        </Collection>
+                    </PropertyValue>
+                        
+                    </Record>
+                </Annotation>
+            </Annotations>                
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>
